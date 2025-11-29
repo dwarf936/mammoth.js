@@ -890,3 +890,28 @@ test('when initials are blank then comment author label is blank', function() {
     assert.equal(commentAuthorLabel({authorInitials: undefined}), "");
     assert.equal(commentAuthorLabel({authorInitials: null}), "");
 });
+
+// Test math element conversion
+function mathOfMathml(mathml, options) {
+    return new documents.Math({mathml: mathml, type: options ? options.type : undefined});
+}
+
+test('math element is converted to div with mathml', function() {
+    var mathElement = mathOfMathml('<math><mn>1</mn><mo>+</mo><mn>1</mn></math>');
+    var converter = new DocumentConverter();
+
+    return converter.convertToHtml(mathElement).then(function(result) {
+        var expectedHtml = '<div><math><mn>1</mn><mo>+</mo><mn>1</mn></math></div>';
+        assert.equal(result.value, expectedHtml);
+    });
+});
+
+test('math element with type is converted to div with mathml and class', function() {
+    var mathElement = mathOfMathml('<math><mn>2</mn><mo>×</mo><mn>3</mn></math>', {type: "display"});
+    var converter = new DocumentConverter();
+
+    return converter.convertToHtml(mathElement).then(function(result) {
+        var expectedHtml = '<div class="math-display"><math><mn>2</mn><mo>×</mo><mn>3</mn></math></div>';
+        assert.equal(result.value, expectedHtml);
+    });
+});
