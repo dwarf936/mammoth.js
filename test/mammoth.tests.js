@@ -521,3 +521,89 @@ test('should throw error if file is not a valid docx document', function() {
         assert.equal(error.message, "Could not find main document part. Are you sure this is a valid .docx file?");
     });
 });
+
+test('getUserStyle should return for test style', function() {
+    var docxPath = path.join(__dirname, "test-data/style-id.docx");
+    return mammoth.getUserStyle({path: docxPath}, "test").then(function(style) {
+        assert.deepStrictEqual(style, {
+            alignment: 'center',
+            color: undefined,
+            font: undefined,
+            fontSize: null,
+            isBold: true,
+            isItalic: true,
+            isStrikethrough: false,
+            name: 'test'
+        });
+    });
+});
+
+test('getUserStyle should return null for non-existent style', function() {
+    var docxPath = path.join(__dirname, "test-data/single-paragraph.docx");
+    return mammoth.getUserStyle({path: docxPath}, "Non-Existent Style").then(function(style) {
+        assert.equal(style, null);
+    });
+});
+
+test('getUserStyle should return style information for existing style', function() {
+    var docxFile = createFakeDocxFile({
+        "word/styles.xml": [
+            "<w:styles xmlns:w='http://schemas.openxmlformats.org/wordprocessingml/2006/main'>",
+            "  <w:style w:type='paragraph' w:styleId='RiskTip'>",
+            "    <w:name w:val='风险提示'/>",
+            "    <w:rPr>",
+            "      <w:sz w:val='24'/>",
+            "      <w:color w:val='dddddd'/>",
+            "      <w:b/>",
+            "      <w:rFonts w:ascii='微软雅黑'/>",
+            "    </w:rPr>",
+            "    <w:pPr>",
+            "      <w:jc w:val='left'/>",
+            "    </w:pPr>",
+            "  </w:style>",
+            "</w:styles>"
+        ].join("\n"),
+        "word/document.xml": testData("simple/word/document.xml")
+    });
+    
+    return mammoth.getUserStyle({file: docxFile}, "风险提示").then(function(style) {
+        assert.equal(style.name, "风险提示");
+        assert.equal(style.fontSize, 12);
+        assert.equal(style.color, "#dddddd");
+        assert.equal(style.isBold, true);
+        assert.equal(style.font, "微软雅黑");
+        assert.equal(style.alignment, "left");
+        assert.equal(style.isItalic, false);
+        assert.equal(style.isStrikethrough, false);
+    });
+});
+
+test('getUserStyle should return character style information', function() {
+    var docxFile = createFakeDocxFile({
+        "word/styles.xml": [
+            "<w:styles xmlns:w='http://schemas.openxmlformats.org/wordprocessingml/2006/main'>",
+            "  <w:style w:type='character' w:styleId='Emphasis'>",
+            "    <w:name w:val='强调'/>",
+            "    <w:rPr>",
+            "      <w:sz w:val='28'/>",
+            "      <w:color w:val='ff0000'/>",
+            "      <w:i/>",
+            "      <w:strike/>",
+            "      <w:rFonts w:ascii='Arial'/>",
+            "    </w:rPr>",
+            "  </w:style>",
+            "</w:styles>"
+        ].join("\n"),
+        "word/document.xml": testData("simple/word/document.xml")
+    });
+    
+    return mammoth.getUserStyle({file: docxFile}, "强调").then(function(style) {
+        assert.equal(style.name, "强调");
+        assert.equal(style.fontSize, 14);
+        assert.equal(style.color, "#ff0000");
+        assert.equal(style.isItalic, true);
+        assert.equal(style.isStrikethrough, true);
+        assert.equal(style.font, "Arial");
+        assert.equal(style.isBold, false);
+    });
+});
