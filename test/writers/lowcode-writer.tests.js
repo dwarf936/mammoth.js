@@ -31,6 +31,17 @@ describe('lowcode-writer', function() {
 
             var schema = lowcodeWriter.convertToLowcodeSchema(simplifiedHtml);
 
+            // 验证 schema 结构
+            assert.ok(schema.componentsTree, 'Schema must have componentsTree');
+            assert(Array.isArray(schema.componentsTree), 'componentsTree must be an array');
+            assert.equal(schema.componentsTree.length, 3, 'componentsTree should have 3 components');
+
+            // 验证每个组件都有 componentName
+            schema.componentsTree.forEach(function(component, index) {
+                assert.ok(component.componentName, 'Component at index ' + index + ' must have componentName');
+            });
+
+            // 验证具体组件内容
             assert.deepEqual(schema, {
                 componentsTree: [
                     {
