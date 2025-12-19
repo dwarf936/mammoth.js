@@ -1,5 +1,6 @@
 interface Mammoth {
     convertToHtml: (input: Input, options?: Options) => Promise<Result>;
+    convertToLowcode: (input: Input, options?: Options) => Promise<LowcodeResult>;
     extractRawText: (input: Input) => Promise<Result>;
     embedStyleMap: (input: Input, styleMap: string) => Promise<{
         toArrayBuffer: () => ArrayBuffer,
@@ -65,6 +66,11 @@ interface Images {
 
 interface Result {
     value: string;
+    messages: Array<Message>;
+}
+
+interface LowcodeResult {
+    value: any;
     messages: Array<Message>;
 }
 
