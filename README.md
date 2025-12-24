@@ -437,6 +437,55 @@ Each paragraph is followed by two newlines.
 
   * `messages`: any messages, such as errors and warnings
 
+#### `mammoth.getUserStyle(input, styleName, options)`
+
+Get the style information for a named style in the document.
+
+* `input`: an object describing the source document.
+  On node.js, the following inputs are supported:
+
+    * `{path: path}`, where `path` is the path to the .docx file.
+    * `{buffer: buffer}`, where `buffer` is a node.js Buffer containing a .docx file.
+
+  In the browser, the following inputs are supported:
+
+    * `{arrayBuffer: arrayBuffer}`, where `arrayBuffer` is an array buffer containing a .docx file.
+
+* `styleName`: the name of the style to retrieve.
+
+* `options` (optional): options for the operation.
+  May have the following properties:
+
+  * `externalFileAccess`: Source documents may reference files outside of the source document.
+    Access to any such external files is disabled by default.
+    To enable access when converting trusted source documents,
+    set `options.externalFileAccess` to `true`.
+
+* Returns a promise containing a result.
+  This result has the following properties:
+
+  * `value`: the style information for the named style, or null if the style is not found.
+    The style information includes:
+
+    * `type`: the type of the style (e.g., "paragraph", "character", "table", "numbering")
+    * `styleId`: the ID of the style
+    * `name`: the name of the style
+    * `properties`: an object containing detailed style properties, such as:
+      * `font`: the font name
+      * `fontSize`: the font size in points
+      * `isBold`: whether the text is bold
+      * `isItalic`: whether the text is italic
+      * `isUnderline`: whether the text is underlined
+      * `isStrikethrough`: whether the text is strikethrough
+      * `isAllCaps`: whether the text is all caps
+      * `isSmallCaps`: whether the text is small caps
+      * `highlight`: the highlight color, or null if no highlight
+      * `verticalAlignment`: the vertical alignment of the text
+      * `alignment`: the paragraph alignment
+      * `indent`: the paragraph indentation properties
+
+  * `messages`: any messages, such as errors and warnings
+
 #### `mammoth.embedStyleMap(input, styleMap)`
 
 Given an existing docx file,
