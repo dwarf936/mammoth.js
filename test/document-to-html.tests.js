@@ -822,7 +822,7 @@ test('can add custom handler for images', function() {
         contentType: "image/png"
     });
     var converter = new DocumentConverter({
-        convertImage: function(element, messages) {
+        convertImage: function(element) {
             return element.read("utf8").then(function(altText) {
                 return [Html.freshElement("img", {alt: altText})];
             });
@@ -842,7 +842,7 @@ test('when custom image handler throws error then error is stored in error messa
         contentType: "image/png"
     });
     var converter = new DocumentConverter({
-        convertImage: function(element, messages) {
+        convertImage: function() {
             throw error;
         }
     });

@@ -1,6 +1,5 @@
-/node_modules
-/_build
-/static/bootstrap
-/static/jszip
-/mammoth.browser.js
-/mammoth.browser.min.js
+node_modules/
+dist/
+test-output/
+*.log
+.DS_Store
