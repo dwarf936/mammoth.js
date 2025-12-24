@@ -45,7 +45,7 @@ test('mammoth.images.imgElement()', {
             contentType: "image/jpeg"
         });
 
-        var result = mammoth.images.imgElement(function(image) {
+        var result = mammoth.images.imgElement(function() {
             return {src: "<src>"};
         })(image);
 
@@ -70,7 +70,7 @@ test('mammoth.images.imgElement()', {
             altText: "<alt>"
         });
 
-        var result = mammoth.images.imgElement(function(image) {
+        var result = mammoth.images.imgElement(function() {
             return {src: "<src>"};
         })(image);
 
@@ -95,7 +95,7 @@ test('mammoth.images.imgElement()', {
             altText: "<alt>"
         });
 
-        var result = mammoth.images.imgElement(function(image) {
+        var result = mammoth.images.imgElement(function() {
             return {alt: "<alt override>", src: "<src>"};
         })(image);
 

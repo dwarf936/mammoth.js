@@ -80,7 +80,7 @@ test("error is thrown when main document part does not exist", function() {
     var docxFile = createFakeDocxFile({
         "_rels/.rels": xml.writeString(relationships, relationshipNamespaces)
     });
-    return docxReader.read(docxFile).then(function(result) {
+    return docxReader.read(docxFile).then(function() {
         assert.ok(false, "Expected error");
     }, function(error) {
         assert.equal(error.message, "Could not find main document part. Are you sure this is a valid .docx file?");
